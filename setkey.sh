@@ -7,12 +7,11 @@ chmod 700 /root/.ssh
 TMPFILE=$(mktemp)
 while [ ! -f /root/.ssh/authorized_keys ] && [ ${ATTEMPTS} -gt 0 ]; do
   ATTEMPTS=$((${ATTEMPTS}-1))
-  curl -f http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key \
+  curl -s http://169.254.169.254/latest/meta-data/public-keys/0/openssh-key \
     > ${TMPFILE} 2>/dev/null
-  if [ $? -eq 1 ]; then
+  if [ $? -eq 0 ]; then
     cat ${TMPFILE} >> /root/.ssh/authorized_keys
     chmod 0600 /root/.ssh/authorized_keys
-    rm -f ${TMPFILE}
     echo "Successfully retrieved public key from instance metadata"
     echo "********************************************************"
     echo "AUTHORIZED KEYS"
@@ -21,3 +20,4 @@ while [ ! -f /root/.ssh/authorized_keys ] && [ ${ATTEMPTS} -gt 0 ]; do
     echo "********************************************************"
   fi
 done
+rm -f ${TMPFILE}
