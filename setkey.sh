@@ -17,6 +17,7 @@ while [ ! -f /root/.ssh/authorized_keys ] && [ ${ATTEMPTS} -gt 0 ]; do
     echo "AUTHORIZED KEYS"
     echo "********************************************************"
     cat /root/.ssh/authorized_keys
+    echo
     echo "********************************************************"
   fi
 done
